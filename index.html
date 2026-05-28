@@ -1,0 +1,250 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LunchLink</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#f2fff2;
+    transition:0.3s;
+}
+
+header{
+    background:#4CAF50;
+    color:white;
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.container{
+    width:90%;
+    max-width:700px;
+    margin:auto;
+    margin-top:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    background:#4CAF50;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    margin-top:15px;
+    font-size:16px;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.post{
+    background:#eaffea;
+    padding:15px;
+    border-radius:15px;
+    margin-top:15px;
+}
+
+img{
+    width:100%;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.dark{
+    background:#1b1b1b;
+    color:white;
+}
+
+.dark .card{
+    background:#2b2b2b;
+}
+
+.dark input,
+.dark textarea,
+.dark select{
+    background:#444;
+    color:white;
+    border:none;
+}
+
+.search-box{
+    margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+🍱 LunchLink
+<br>
+<small>Sharing Food, Sharing Smiles</small>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Upload Your Lunch</h2>
+
+<input type="text" id="name" placeholder="Student Name">
+
+<input type="text" id="class" placeholder="Class / Section">
+
+<input type="text" id="food" placeholder="Food Name">
+
+<select id="type">
+<option>Veg</option>
+<option>Non‑Veg</option>
+</select>
+
+<input type="text" id="allergy" placeholder="Allergy Warning (optional)">
+
+<textarea id="details" placeholder="Extra details"></textarea>
+
+<input type="file" id="image">
+
+<button onclick="uploadLunch()">Upload Lunch 🍱</button>
+
+<button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+</div>
+
+<div class="card search-box">
+<h2>Search Lunches</h2>
+<input type="text" id="search" placeholder="Search by food or student" onkeyup="searchPosts()">
+</div>
+
+<div class="card">
+<h2>Today's Lunches</h2>
+<div id="posts"></div>
+</div>
+
+</div>
+
+<script>
+let points = 0;
+
+function uploadLunch(){
+
+    let name = document.getElementById('name').value;
+    let studentClass = document.getElementById('class').value;
+    let food = document.getElementById('food').value;
+    let type = document.getElementById('type').value;
+    let allergy = document.getElementById('allergy').value;
+    let details = document.getElementById('details').value;
+
+    let imageInput = document.getElementById('image');
+    let file = imageInput.files[0];
+
+    if(name === '' || food === ''){
+        alert('Please fill all important details!');
+        return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+
+        let post = document.createElement('div');
+        post.classList.add('post');
+
+        post.innerHTML = `
+            <h3>${food}</h3>
+            <p><b>Student:</b> ${name}</p>
+            <p><b>Class:</b> ${studentClass}</p>
+            <p><b>Type:</b> ${type}</p>
+            <p><b>Allergy Warning:</b> ${allergy}</p>
+            <p>${details}</p>
+            ${file ? `<img src="${e.target.result}">` : ''}
+            <button onclick="claimFood(this)">I Want This 🍱</button>
+        `;
+
+        document.getElementById('posts').prepend(post);
+
+        points += 10;
+        alert('Lunch Uploaded Successfully! +10 Healthy Points ⭐');
+
+        clearInputs();
+    }
+
+    if(file){
+        reader.readAsDataURL(file);
+    }else{
+        reader.onload({target:{result:''}});
+    }
+}
+
+function claimFood(button){
+
+    let answer = prompt("Enter your name to reserve this lunch:");
+
+    if(answer && answer.trim() !== ""){
+
+        button.innerHTML = `Reserved by ${answer} ✅`;
+
+        button.style.background = "green";
+
+        button.disabled = true;
+
+        alert(answer + " reserved this lunch!");
+    }
+}
+
+function clearInputs(){
+    document.getElementById('name').value = '';
+    document.getElementById('class').value = '';
+    document.getElementById('food').value = '';
+    document.getElementById('allergy').value = '';
+    document.getElementById('details').value = '';
+    document.getElementById('image').value = '';
+}
+
+function toggleDarkMode(){
+    document.body.classList.toggle('dark');
+}
+
+function searchPosts(){
+    let input = document.getElementById('search').value.toLowerCase();
+    let posts = document.getElementsByClassName('post');
+
+    for(let i=0; i<posts.length; i++){
+        let text = posts[i].innerText.toLowerCase();
+
+        if(text.includes(input)){
+            posts[i].style.display = 'block';
+        }else{
+            posts[i].style.display = 'none';
+        }
+    }
+}
+</script>
+
+</body>
+</html>
+```
