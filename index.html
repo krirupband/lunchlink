@@ -2,6 +2,9 @@
 
 
 
+# Advanced LunchBox Sharing Website Code
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -183,6 +186,7 @@ function uploadLunch(){
             <p>${details}</p>
             ${file ? `<img src="${e.target.result}">` : ''}
             <button onclick="claimFood(this)">I Want This 🍱</button>
+            <button onclick="takeDownLunch(this)" style="background:red;">Take Down ❌</button>
         `;
 
         document.getElementById('posts').prepend(post);
@@ -202,17 +206,17 @@ function uploadLunch(){
 
 function claimFood(button){
 
-    let answer = prompt("Enter your name to reserve this lunch:");
+    let answer = prompt('Enter your name to reserve this lunch:');
 
-    if(answer && answer.trim() !== ""){
+    if(answer && answer.trim() !== ''){
 
         button.innerHTML = `Reserved by ${answer} ✅`;
 
-        button.style.background = "green";
+        button.style.background = 'green';
 
         button.disabled = true;
 
-        alert(answer + " reserved this lunch!");
+        alert(answer + ' reserved this lunch!');
     }
 }
 
@@ -227,6 +231,19 @@ function clearInputs(){
 
 function toggleDarkMode(){
     document.body.classList.toggle('dark');
+}
+
+function takeDownLunch(button){
+
+    let post = button.parentElement;
+
+    post.style.opacity = '0.5';
+
+    button.innerHTML = 'Lunch Removed ❌';
+
+    button.disabled = true;
+
+    alert('This lunch is no longer available.');
 }
 
 function searchPosts(){
